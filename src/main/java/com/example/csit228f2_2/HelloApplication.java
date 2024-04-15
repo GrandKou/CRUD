@@ -5,6 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
@@ -31,7 +32,7 @@ public class HelloApplication extends Application {
     public static void main(String[] args) {
         launch();
     }
-
+    public static int loggedInUserID = -1;
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -103,7 +104,14 @@ public class HelloApplication extends Application {
         actionTarget.setFont(Font.font(30));
         grid.add(actionTarget, 1, 6);
 
-        btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
+        Button btnSignUp = new Button("Sign Up");
+        btnSignUp.setFont(Font.font(45));
+        HBox hbSignUp = new HBox();
+        hbSignUp.getChildren().add(btnSignUp);
+        hbSignUp.setAlignment(Pos.CENTER);
+        grid.add(hbSignUp, 0, 4, 2, 1);
+
+        btnSignUp.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent actionEvent) {
                 String username = tfUsername.getText();
@@ -112,15 +120,47 @@ public class HelloApplication extends Application {
                 try (Connection c = MySqlConnection.getConnection();
                      PreparedStatement statement = c.prepareStatement(
                              "INSERT INTO users (name, password) VALUES (?, ?)")) {
-                    String name = "rienel";
-                    String password
                     statement.setString(1, username);
                     statement.setString(2, password);
+                    statement.executeUpdate();
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }
             }
         });
+
+        btnSignIn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent) {
+                String username = tfUsername.getText();
+                String password = pfPassword.getText();
+
+                try (Connection c = MySqlConnection.getConnection();
+                     PreparedStatement statement = c.prepareStatement(
+                             "SELECT * FROM users WHERE name = ? AND password = ?")) {
+                    statement.setString(1, username);
+                    statement.setString(2, password);
+
+                    ResultSet resultSet = statement.executeQuery();
+
+                    if (resultSet.next()) {
+                        int userId = resultSet.getInt("id");
+                        loggedInUserID = userId;
+                        actionTarget.setText("Sign in successful!");
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+                        Parent root = loader.load();
+                        Stage stage = new Stage();
+                        stage.setScene(new Scene(root));
+                        stage.show();
+                    } else {
+                        actionTarget.setText("Incorrect username or password.");
+                    }
+                } catch (SQLException | IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
 
         EventHandler<KeyEvent> fieldChange = new EventHandler<KeyEvent>() {
             @Override
@@ -135,5 +175,21 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(pnMain, 700, 560);
         stage.setScene(scene);
         stage.show();
+    }
+
+    public void updateUserData(String newName, String newPassword, int userId) {
+        try (Connection c = MySqlConnection.getConnection();
+             PreparedStatement statement = c.prepareStatement(
+                     "UPDATE users SET name=?, password=? WHERE id=?")) {
+            statement.setString(1, newName);
+            statement.setString(2, newPassword);
+            statement.setInt(3, userId);
+            int rowsUpdated = statement.executeUpdate();
+            if (rowsUpdated > 0) {
+                System.out.println("Data updated successfully");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
