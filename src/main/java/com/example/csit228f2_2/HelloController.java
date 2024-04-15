@@ -32,7 +32,7 @@ public class HelloController {
              PreparedStatement preparedStatement = c.prepareStatement(
                      "DELETE FROM users WHERE id = ?")) {
 
-            int userIdToDelete = 1;
+            int userIdToDelete = HelloApplication.loggedInUserID;
 
             preparedStatement.setInt(1, userIdToDelete);
 
