@@ -1,7 +1,6 @@
 package com.example.csit228f2_2;
 
 import java.net.MalformedURLException;
-import java.net.URL;
 
 public class User {
     String username;

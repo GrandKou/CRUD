@@ -22,8 +22,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +34,6 @@ public class HelloApplication extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        users = new ArrayList<>();
-        // LOAD USERS
-        users.add(new User("tsgtest", "123456"));
-        users.add(new User("jayvince", "secret"));
-        users.add(new User("russselll", "palma"));
 
         AnchorPane pnMain = new AnchorPane();
         GridPane grid = new GridPane();
@@ -105,7 +99,7 @@ public class HelloApplication extends Application {
         hbSignIn.getChildren().add(btnSignIn);
         hbSignIn.setAlignment(Pos.CENTER);
         grid.add(hbSignIn, 0, 3, 2, 1);
-        final Text actionTarget = new Text("Hi");
+        final Text actionTarget = new Text("");
         actionTarget.setFont(Font.font(30));
         grid.add(actionTarget, 1, 6);
 
@@ -114,20 +108,17 @@ public class HelloApplication extends Application {
             public void handle(ActionEvent actionEvent) {
                 String username = tfUsername.getText();
                 String password = pfPassword.getText();
-                for (User user : users) {
-                    if (username.equals(user.username) && password.equals(user.password)) {
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
-                        try {
-                            Scene scene = new Scene(loader.load());
-                            stage.setScene(scene);
-                            stage.show();
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }
+
+                try (Connection c = MySqlConnection.getConnection();
+                     PreparedStatement statement = c.prepareStatement(
+                             "INSERT INTO users (name, password) VALUES (?, ?)")) {
+                    String name = "rienel";
+                    String password
+                    statement.setString(1, username);
+                    statement.setString(2, password);
+                } catch (SQLException e) {
+                    e.printStackTrace();
                 }
-                actionTarget.setText("Invalid username/password");
-                actionTarget.setOpacity(1);
             }
         });
 
