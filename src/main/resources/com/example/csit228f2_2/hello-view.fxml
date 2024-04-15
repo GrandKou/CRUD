@@ -12,7 +12,7 @@
    <children>
       <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0" AnchorPane.bottomAnchor="20.0" AnchorPane.leftAnchor="50.0" AnchorPane.rightAnchor="50.0" AnchorPane.topAnchor="20.0">
          <children>
-            <TextField fx:id="tfNewUsername" promptText="New username">
+            <TextField fx:id="nameNewName" promptText="New username">
                <font>
                   <Font size="18.0" />
                </font></TextField>
@@ -20,7 +20,7 @@
                <font>
                   <Font size="14.0" />
                </font></Button>
-            <PasswordField fx:id="tfNewPassword" promptText="New Password">
+            <PasswordField fx:id="psNewPassword" promptText="New Password">
                <font>
                   <Font size="18.0" />
                </font>

@@ -3,28 +3,16 @@ package com.example.csit228f2_2;
 import javafx.fxml.FXML;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
 
 
 import java.sql.*;
 
 public class HelloController {
     @FXML
-    private TextField tfNewUsername;
-    @FXML
-    private TextField tfCurrentUsername;
-    @FXML
-    private PasswordField pfCurrentPassword;
+    private TextField nameNewName;
 
     @FXML
-    private PasswordField pfNewPassword;
-
-    @FXML
-    private PasswordField tfNewPassword;
-    @FXML
-    private Text tfStatus;
-    @FXML
-    private TextField tfUsername;
+    private PasswordField psNewPassword;
 
     @FXML
     private void onDeleteAccount() {
@@ -32,15 +20,13 @@ public class HelloController {
              PreparedStatement preparedStatement = c.prepareStatement(
                      "DELETE FROM users WHERE id = ?")) {
 
-            int userIdToDelete = HelloApplication.loggedInUserID;
+            int userIdToDelete = HelloApplication.LogedUser;
 
             preparedStatement.setInt(1, userIdToDelete);
 
             int rowsDeleted = preparedStatement.executeUpdate();
             if (rowsDeleted > 0) {
-                System.out.println("Data deleted successfully!");
-            } else {
-                System.out.println("No user found with the provided ID.");
+                System.out.println("Data deleted succesfully!");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -49,8 +35,8 @@ public class HelloController {
 
     @FXML
     private void setNewUsername() {
-        int currentUserId = HelloApplication.loggedInUserID;
-        String newUsername = tfNewUsername.getText();
+        int currentUserId = HelloApplication.LogedUser;
+        String newUsername = nameNewName.getText();
 
         UpdateData updateData = new UpdateData();
         try {
@@ -63,8 +49,8 @@ public class HelloController {
 
     @FXML
     private void setNewPassword() {
-        int currentUserId = HelloApplication.loggedInUserID;
-        String newPassword = tfNewPassword.getText();
+        int currentUserId = HelloApplication.LogedUser;
+        String newPassword = psNewPassword.getText();
 
         UpdateData updateData = new UpdateData();
         try {

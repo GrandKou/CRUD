@@ -13,8 +13,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
@@ -24,15 +22,20 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.List;
 
 public class HelloApplication extends Application {
     public static List<User> users;
+    public static Stage stage;
+    public static Scene scene;
+
     public static void main(String[] args) {
         launch();
     }
-    public static int loggedInUserID = -1;
+    public static int LogedUser = -1;
+    public static TextField nameUsername;
+    public static PasswordField psPassword;
+    public static Text actionTarget;
     @Override
     public void start(Stage stage) throws Exception {
 
@@ -145,7 +148,7 @@ public class HelloApplication extends Application {
 
                     if (resultSet.next()) {
                         int userId = resultSet.getInt("id");
-                        loggedInUserID = userId;
+                        LogedUser = userId;
                         actionTarget.setText("Sign in successful!");
                         FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
                         Parent root = loader.load();
@@ -153,7 +156,7 @@ public class HelloApplication extends Application {
                         stage.setScene(new Scene(root));
                         stage.show();
                     } else {
-                        actionTarget.setText("Incorrect username or password.");
+                        actionTarget.setText("Make an account, or Incorrect username or password!.");
                     }
                 } catch (SQLException | IOException e) {
                     e.printStackTrace();
