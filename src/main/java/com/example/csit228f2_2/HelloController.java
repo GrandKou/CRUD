@@ -26,7 +26,7 @@ public class HelloController {
 
             int rowsDeleted = preparedStatement.executeUpdate();
             if (rowsDeleted > 0) {
-                System.out.println("Data deleted succesfully!");
+                System.out.println("Data deleted successfully!");
             }
         } catch (SQLException e) {
             e.printStackTrace();

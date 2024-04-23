@@ -150,7 +150,7 @@ public class HelloApplication extends Application {
                         int userId = resultSet.getInt("id");
                         LogedUser = userId;
                         actionTarget.setText("Sign in successful!");
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("Note.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("notepadu.fxml"));
                         Parent root = loader.load();
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));
@@ -174,25 +174,8 @@ public class HelloApplication extends Application {
         tfUsername.setOnKeyTyped(fieldChange);
         pfPassword.setOnKeyTyped(fieldChange);
 
-
         Scene scene = new Scene(pnMain, 700, 560);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public void updateUserData(String newName, String newPassword, int userId) {
-        try (Connection c = MySqlConnection.getConnection();
-             PreparedStatement statement = c.prepareStatement(
-                     "UPDATE users SET name=?, password=? WHERE id=?")) {
-            statement.setString(1, newName);
-            statement.setString(2, newPassword);
-            statement.setInt(3, userId);
-            int rowsUpdated = statement.executeUpdate();
-            if (rowsUpdated > 0) {
-                System.out.println("Data updated successfully");
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
     }
 }
