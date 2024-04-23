@@ -150,7 +150,7 @@ public class HelloApplication extends Application {
                         int userId = resultSet.getInt("id");
                         LogedUser = userId;
                         actionTarget.setText("Sign in successful!");
-                        FXMLLoader loader = new FXMLLoader(getClass().getResource("hello-view.fxml"));
+                        FXMLLoader loader = new FXMLLoader(getClass().getResource("Note.fxml"));
                         Parent root = loader.load();
                         Stage stage = new Stage();
                         stage.setScene(new Scene(root));
